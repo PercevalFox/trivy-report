@@ -19,7 +19,7 @@ jobs:
       # Scan the repository filesystem. Swap for `trivy image -f json <image>`
       # if you build a container.
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           format: json
