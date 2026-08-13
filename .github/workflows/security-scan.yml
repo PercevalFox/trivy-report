@@ -1,0 +1,29 @@
+name: Security scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Scan the repository filesystem. Swap for `trivy image -f json <image>`
+      # if you build a container.
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          format: json
+          output: scan.json
+
+      - name: Render Markdown report into the job summary
+        run: python trivy_report.py scan.json --fail-on CRITICAL >> "$GITHUB_STEP_SUMMARY"
